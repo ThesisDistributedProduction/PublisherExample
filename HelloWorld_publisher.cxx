@@ -182,7 +182,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
 	DDS_InstanceHandle_t instance_handle2 = DDS_HANDLE_NIL;
     
     if (instance == NULL) {
-        printf("HelloWorldTypeSupport::create_data error\n");
+        printf("TurbineTypeSupport::create_data error\n");
         publisher_shutdown(participant);
         return -1;
     }
@@ -190,41 +190,26 @@ extern "C" int publisher_main(int domainId, int sample_count)
     /* For a data type that has a key, if the same instance is going to be
        written multiple times, initialize the key here
        and register the keyed instance prior to writing */
-/*
-    instance_handle = HelloWorld_writer->register_instance(*instance);
-*/
+
+	instance->turbineId = 1;
+	instance2->turbineId = 2;
+
+	instance_handle = HelloWorld_writer->register_instance(*instance);
+	instance_handle2 = HelloWorld_writer->register_instance(*instance2);
+	
 
     /* Main loop */
     for (count=0; (sample_count == 0) || (count < sample_count); ++count) {
 
         printf("Writing turbine info, count %d\n", count);
 
-		instance->turbineId = 1;
 		instance->currentProduction = count;
 		instance->maxProduction = 80;
 		instance->setPoint = 10;
         
         retcode = HelloWorld_writer->write(*instance, instance_handle);
 
-
-		/* instance
-		std::stringstream msgIdBuffer3;
-		msgIdBuffer3 << "Turbine 3";
-		std::string msgId3 = msgIdBuffer3.str();
-
-		memset(instance->turbineId, 0, 20);
-		const char* s3 = msgId3.c_str();
-		std::strncpy(instance->turbineId, s3, sizeof(s3) + 1);
-		instance->currentProduction = 50 + count;
-		instance->maxProduction = 80;
-		instance->setPoint = 10;
-
-		retcode = HelloWorld_writer->write(*instance, instance_handle);
-
-		*/
-		/* instance 2 */
-		instance2->turbineId = 2;
-		instance2->currentProduction = 50 + count;
+		instance2->currentProduction = count;
 		instance2->maxProduction = 80;
 		instance2->setPoint = 10;
 
