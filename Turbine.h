@@ -8,8 +8,8 @@
   or consult the RTI Connext manual.
 */
 
-#ifndef Turbine_1089397427_h
-#define Turbine_1089397427_h
+#ifndef Turbine_1089397372_h
+#define Turbine_1089397372_h
 
 #ifndef NDDS_STANDALONE_TYPE
     #ifdef __cplusplus
@@ -25,8 +25,7 @@
     #include "ndds_standalone_type.h"
 #endif
 
-             
-static const DDS_Long ID_MAX_STRING_SIZE = 256;
+
 #define Turbine_LAST_MEMBER_ID 3
 #ifdef __cplusplus
 extern "C" {
@@ -68,7 +67,7 @@ public:
 
 #endif
     
-    char*  turbineId; /* maximum length = ((ID_MAX_STRING_SIZE)) */
+    DDS_Long  turbineId;
 
     DDS_Long  maxProduction;
 
@@ -138,4 +137,4 @@ RTIBool Turbine_copy(
 
 
 
-#endif /* Turbine_1089397427_h */
+#endif /* Turbine_1089397372_h */

@@ -103,9 +103,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
     DDSTopic *topic = NULL;
     DDSDataWriter *writer = NULL;
     TurbineDataWriter * HelloWorld_writer = NULL;
-	Turbine *instance = NULL;
     DDS_ReturnCode_t retcode;
-    DDS_InstanceHandle_t instance_handle = DDS_HANDLE_NIL;
     const char *type_name = NULL;
     int count = 0;  
     DDS_Duration_t send_period = {1,0};
@@ -176,7 +174,12 @@ extern "C" int publisher_main(int domainId, int sample_count)
 
     /* Create data sample for writing */
 
-    instance = TurbineTypeSupport::create_data();
+	Turbine *instance =  TurbineTypeSupport::create_data();
+	Turbine *instance2 = TurbineTypeSupport::create_data();
+
+
+	DDS_InstanceHandle_t instance_handle = DDS_HANDLE_NIL;
+	DDS_InstanceHandle_t instance_handle2 = DDS_HANDLE_NIL;
     
     if (instance == NULL) {
         printf("HelloWorldTypeSupport::create_data error\n");
@@ -196,19 +199,37 @@ extern "C" int publisher_main(int domainId, int sample_count)
 
         printf("Writing turbine info, count %d\n", count);
 
-        /* Modify the data to be sent here */
-		std::stringstream msgIdBuffer;
-		msgIdBuffer << "Turbine " << count;
-		std::string msgId = msgIdBuffer.str();
-
-		memset(instance->turbineId, 0, 20);
-		const char* s = msgId.c_str();
-		std::strncpy(instance->turbineId, s, sizeof(s) + 1);
-		instance->currentProduction = 50;
+		instance->turbineId = 1;
+		instance->currentProduction = count;
 		instance->maxProduction = 80;
 		instance->setPoint = 10;
         
         retcode = HelloWorld_writer->write(*instance, instance_handle);
+
+
+		/* instance
+		std::stringstream msgIdBuffer3;
+		msgIdBuffer3 << "Turbine 3";
+		std::string msgId3 = msgIdBuffer3.str();
+
+		memset(instance->turbineId, 0, 20);
+		const char* s3 = msgId3.c_str();
+		std::strncpy(instance->turbineId, s3, sizeof(s3) + 1);
+		instance->currentProduction = 50 + count;
+		instance->maxProduction = 80;
+		instance->setPoint = 10;
+
+		retcode = HelloWorld_writer->write(*instance, instance_handle);
+
+		*/
+		/* instance 2 */
+		instance2->turbineId = 2;
+		instance2->currentProduction = 50 + count;
+		instance2->maxProduction = 80;
+		instance2->setPoint = 10;
+
+		retcode = HelloWorld_writer->write(*instance2, instance_handle2);
+
         if (retcode != DDS_RETCODE_OK) {
             printf("write error %d\n", retcode);
         }

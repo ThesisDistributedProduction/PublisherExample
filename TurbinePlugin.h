@@ -8,8 +8,8 @@
   or consult the RTI Connext manual.
 */
 
-#ifndef TurbinePlugin_1089397427_h
-#define TurbinePlugin_1089397427_h
+#ifndef TurbinePlugin_1089397372_h
+#define TurbinePlugin_1089397372_h
 
 #include "Turbine.h"
 
@@ -34,10 +34,29 @@ struct RTICdrStream;
 extern "C" {
 #endif
 
+/* The type used to store keys for instances of type struct
+ * Turbine.
+ *
+ * By default, this type is struct Turbine
+ * itself. However, if for some reason this choice is not practical for your
+ * system (e.g. if sizeof(struct Turbine)
+ * is very large), you may redefine this typedef in terms of another type of
+ * your choosing. HOWEVER, if you define the KeyHolder type to be something
+ * other than struct Turbine, the
+ * following restriction applies: the key of struct
+ * Turbine must consist of a
+ * single field of your redefined KeyHolder type and that field must be the
+ * first field in struct Turbine.
+*/
+typedef  class Turbine TurbineKeyHolder;
+
 
 #define TurbinePlugin_get_sample PRESTypePluginDefaultEndpointData_getSample  
 #define TurbinePlugin_get_buffer PRESTypePluginDefaultEndpointData_getBuffer 
 #define TurbinePlugin_return_buffer PRESTypePluginDefaultEndpointData_returnBuffer 
+
+#define TurbinePlugin_get_key PRESTypePluginDefaultEndpointData_getKey 
+#define TurbinePlugin_return_key PRESTypePluginDefaultEndpointData_returnKey
  
 
 #define TurbinePlugin_create_sample PRESTypePluginDefaultEndpointData_createSample 
@@ -81,6 +100,20 @@ TurbinePluginSupport_print_data(
     const char *desc,
     unsigned int indent);
 
+
+NDDSUSERDllExport extern Turbine*
+TurbinePluginSupport_create_key_ex(RTIBool allocate_pointers);
+
+NDDSUSERDllExport extern Turbine*
+TurbinePluginSupport_create_key(void);
+
+NDDSUSERDllExport extern void 
+TurbinePluginSupport_destroy_key_ex(
+    TurbineKeyHolder *key,RTIBool deallocate_pointers);
+
+NDDSUSERDllExport extern void 
+TurbinePluginSupport_destroy_key(
+    TurbineKeyHolder *key);
 
 /* ----------------------------------------------------------------------------
     Callback functions:
@@ -245,6 +278,32 @@ TurbinePlugin_serialized_sample_to_key(
     RTIBool deserialize_key, 
     void *endpoint_plugin_qos);
 
+ 
+NDDSUSERDllExport extern RTIBool 
+TurbinePlugin_instance_to_key(
+    PRESTypePluginEndpointData endpoint_data,
+    TurbineKeyHolder *key, 
+    const Turbine *instance);
+
+NDDSUSERDllExport extern RTIBool 
+TurbinePlugin_key_to_instance(
+    PRESTypePluginEndpointData endpoint_data,
+    Turbine *instance, 
+    const TurbineKeyHolder *key);
+
+NDDSUSERDllExport extern RTIBool 
+TurbinePlugin_instance_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    DDS_KeyHash_t *keyhash,
+    const Turbine *instance);
+
+NDDSUSERDllExport extern RTIBool 
+TurbinePlugin_serialized_sample_to_keyhash(
+    PRESTypePluginEndpointData endpoint_data,
+    struct RTICdrStream *stream, 
+    DDS_KeyHash_t *keyhash,
+    RTIBool deserialize_encapsulation,
+    void *endpoint_plugin_qos); 
      
 /* Plugin Functions */
 NDDSUSERDllExport extern struct PRESTypePlugin*
@@ -265,4 +324,4 @@ TurbinePlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif        
 
-#endif /* TurbinePlugin_1089397427_h */
+#endif /* TurbinePlugin_1089397372_h */

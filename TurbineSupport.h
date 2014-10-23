@@ -8,8 +8,8 @@
   or consult the RTI Connext manual.
 */
 
-#ifndef TurbineSupport_1089397427_h
-#define TurbineSupport_1089397427_h
+#ifndef TurbineSupport_1089397372_h
+#define TurbineSupport_1089397372_h
 
 /* Uses */
 #include "Turbine.h"
@@ -70,4 +70,4 @@ DDS_DATAREADER_C(TurbineDataReader, TurbineSeq, Turbine);
 
 
 
-#endif  /* TurbineSupport_1089397427_h */
+#endif  /* TurbineSupport_1089397372_h */

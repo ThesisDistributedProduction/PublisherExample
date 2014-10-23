@@ -45,7 +45,6 @@ DDS_TypeCode* Turbine_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode Turbine_g_tc_turbineId_string = DDS_INITIALIZE_STRING_TYPECODE((ID_MAX_STRING_SIZE));
 
     static DDS_TypeCode_Member Turbine_g_tc_members[4]=
     {
@@ -61,7 +60,7 @@ DDS_TypeCode* Turbine_get_typecode()
             0, /* Ignored */
             0, /* Ignored */
             NULL, /* Ignored */
-            RTI_CDR_REQUIRED_MEMBER, /* Member flags */
+            RTI_CDR_KEY_MEMBER, /* Member flags */
             DDS_PRIVATE_MEMBER,/* Ignored */
             1,
             NULL/* Ignored */
@@ -139,7 +138,7 @@ DDS_TypeCode* Turbine_get_typecode()
     }
 
 
-    Turbine_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&Turbine_g_tc_turbineId_string;
+    Turbine_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
     Turbine_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
     Turbine_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
     Turbine_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
@@ -177,16 +176,9 @@ RTIBool Turbine_initialize_w_params(
     if (allocParams) {} /* To avoid warnings */
         
 
-    if (allocParams->allocate_memory) {
-        sample->turbineId = DDS_String_alloc(((ID_MAX_STRING_SIZE)));
-        if (sample->turbineId == NULL) {
-            return RTI_FALSE;
-        }
-    } else {
-        if (sample->turbineId != NULL) { 
-            sample->turbineId[0] = '\0';
-        }
-    }
+    if (!RTICdrType_initLong(&sample->turbineId)) {
+        return RTI_FALSE;
+    }                
             
 
     if (!RTICdrType_initLong(&sample->maxProduction)) {
@@ -236,11 +228,6 @@ void Turbine_finalize_w_params(
     if (deallocParams) {} /* To avoid warnings */
 
 
-    if (sample->turbineId != NULL) {    
-        DDS_String_free(sample->turbineId);
-        sample->turbineId = NULL;
-    }
-            
 
 
 
@@ -274,8 +261,8 @@ RTIBool Turbine_copy(
     const Turbine* src)
 {
 
-    if (!RTICdrType_copyString(
-        dst->turbineId, src->turbineId, ((ID_MAX_STRING_SIZE)) + 1)) {
+    if (!RTICdrType_copyLong(
+        &dst->turbineId, &src->turbineId)) {
         return RTI_FALSE;
     }
             
