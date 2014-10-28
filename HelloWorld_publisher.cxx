@@ -106,7 +106,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
     DDS_ReturnCode_t retcode;
     const char *type_name = NULL;
     int count = 0;  
-    DDS_Duration_t send_period = {1,0};
+	DDS_Duration_t send_period = { 0, 150000000 };
 
     /* To customize participant QoS, use 
        the configuration file USER_QOS_PROFILES.xml */
@@ -175,11 +175,11 @@ extern "C" int publisher_main(int domainId, int sample_count)
     /* Create data sample for writing */
 
 	Turbine *instance =  TurbineTypeSupport::create_data();
-	Turbine *instance2 = TurbineTypeSupport::create_data();
+	//Turbine *instance2 = TurbineTypeSupport::create_data();
 
 
 	DDS_InstanceHandle_t instance_handle = DDS_HANDLE_NIL;
-	DDS_InstanceHandle_t instance_handle2 = DDS_HANDLE_NIL;
+	//DDS_InstanceHandle_t instance_handle2 = DDS_HANDLE_NIL;
     
     if (instance == NULL) {
         printf("TurbineTypeSupport::create_data error\n");
@@ -192,10 +192,10 @@ extern "C" int publisher_main(int domainId, int sample_count)
        and register the keyed instance prior to writing */
 
 	instance->turbineId = 1;
-	instance2->turbineId = 2;
+	//instance2->turbineId = 2;
 
 	instance_handle = HelloWorld_writer->register_instance(*instance);
-	instance_handle2 = HelloWorld_writer->register_instance(*instance2);
+	//instance_handle2 = HelloWorld_writer->register_instance(*instance2);
 	
 
     /* Main loop */
@@ -209,7 +209,11 @@ extern "C" int publisher_main(int domainId, int sample_count)
         
         retcode = HelloWorld_writer->write(*instance, instance_handle);
 
-		instance2->currentProduction = count;
+		if (retcode != DDS_RETCODE_OK) {
+			printf("write error %d\n", retcode);
+		}
+
+		/*instance2->currentProduction = count;
 		instance2->maxProduction = 80;
 		instance2->setPoint = 10;
 
@@ -218,7 +222,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
         if (retcode != DDS_RETCODE_OK) {
             printf("write error %d\n", retcode);
         }
-
+		*/
         NDDSUtility::sleep(send_period);
     }
 

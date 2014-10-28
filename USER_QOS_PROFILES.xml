@@ -18,6 +18,7 @@
                     <kind>KEEP_LAST_HISTORY_QOS</kind>
                     <depth>1</depth>
                 </history>
+				
 
 				<!-- Til ny-tilkomne DataReaders. Vi sender tidligere sendt data til ny opdagede DataReaders,
 				 så længe DataWriteren lever. Data, der er i historikken, bliver sendt. 
@@ -33,12 +34,19 @@
                     <name>TurbineDataWriter</name>
                 </publication_name>
 				
-				<liveliness>
+				<lifespan>
+					<duration>
+						 <sec>0</sec>
+						 <nanosec>150000000</nanosec>
+					</duration>
+				</lifespan>
+				
+				<!-- <liveliness>
 					<lease_duration>
 						<sec>0</sec>
 						<nanosec>300000000</nanosec>
 					</lease_duration>
-				</liveliness>
+				</liveliness> -->  
 			</datawriter_qos>
 			
 
@@ -48,12 +56,12 @@
                     <name>TurbineDataReader</name>
                 </subscription_name>
 				
-				<liveliness>
+				<!-- <liveliness>
 					<lease_duration>
 						<sec>1</sec>
 						<nanosec>0</nanosec>
 					</lease_duration>
-				</liveliness>
+				</liveliness> -->  
 			</datareader_qos>
 
 			<participant_qos>
