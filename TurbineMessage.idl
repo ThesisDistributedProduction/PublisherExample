@@ -1,0 +1,6 @@
+struct TurbineMessage {
+	long turbineId; //@key
+	long maxProduction;
+	long currentProduction;
+	long setPoint;
+};
