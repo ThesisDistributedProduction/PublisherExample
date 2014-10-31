@@ -272,17 +272,17 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Turbine.cxx" />
-    <ClCompile Include="TurbinePlugin.cxx" />
-    <ClCompile Include="TurbineSupport.cxx" />
+    <ClCompile Include="TurbineMessage.cxx" />
+    <ClCompile Include="TurbineMessagePlugin.cxx" />
+    <ClCompile Include="TurbineMessageSupport.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HelloWorld.h" />
     <ClInclude Include="HelloWorldPlugin.h" />
     <ClInclude Include="HelloWorldSupport.h" />
-    <ClInclude Include="Turbine.h" />
-    <ClInclude Include="TurbinePlugin.h" />
-    <ClInclude Include="TurbineSupport.h" />
+    <ClInclude Include="TurbineMessage.h" />
+    <ClInclude Include="TurbineMessagePlugin.h" />
+    <ClInclude Include="TurbineMessageSupport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

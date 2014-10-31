@@ -56,9 +56,9 @@ modification history
 #include <string>
 #include <sstream>
 
-#include "Turbine.h"
-#include "TurbineSupport.h"
-#include "TurbinePlugin.h"
+#include "TurbineMessage.h"
+#include "TurbineMessageSupport.h"
+#include "TurbineMessagePlugin.h"
 
 /* Delete all entities */
 static int publisher_shutdown(
@@ -102,11 +102,11 @@ extern "C" int publisher_main(int domainId, int sample_count)
     DDSPublisher *publisher = NULL;
     DDSTopic *topic = NULL;
     DDSDataWriter *writer = NULL;
-    TurbineDataWriter * HelloWorld_writer = NULL;
+    TurbineMessageDataWriter * HelloWorld_writer = NULL;
     DDS_ReturnCode_t retcode;
     const char *type_name = NULL;
     int count = 0;  
-	DDS_Duration_t send_period = { 0, 150000000 };
+	DDS_Duration_t send_period = { 0, 100000000 };
 
     /* To customize participant QoS, use 
        the configuration file USER_QOS_PROFILES.xml */
@@ -130,8 +130,8 @@ extern "C" int publisher_main(int domainId, int sample_count)
     }
 
     /* Register type before creating topic */
-	type_name = TurbineTypeSupport::get_type_name();
-	retcode = TurbineTypeSupport::register_type(
+	type_name = TurbineMessageTypeSupport::get_type_name();
+	retcode = TurbineMessageTypeSupport::register_type(
         participant, type_name);
     if (retcode != DDS_RETCODE_OK) {
         printf("register_type error %d\n", retcode);
@@ -165,7 +165,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
         publisher_shutdown(participant);
         return -1;
     }
-    HelloWorld_writer = TurbineDataWriter::narrow(writer);
+    HelloWorld_writer = TurbineMessageDataWriter::narrow(writer);
     if (HelloWorld_writer == NULL) {
         printf("DataWriter narrow error\n");
         publisher_shutdown(participant);
@@ -174,12 +174,12 @@ extern "C" int publisher_main(int domainId, int sample_count)
 
     /* Create data sample for writing */
 
-	Turbine *instance =  TurbineTypeSupport::create_data();
-	//Turbine *instance2 = TurbineTypeSupport::create_data();
+	TurbineMessage *instance =  TurbineMessageTypeSupport::create_data();
+	TurbineMessage *instance2 = TurbineMessageTypeSupport::create_data();
 
 
 	DDS_InstanceHandle_t instance_handle = DDS_HANDLE_NIL;
-	//DDS_InstanceHandle_t instance_handle2 = DDS_HANDLE_NIL;
+	DDS_InstanceHandle_t instance_handle2 = DDS_HANDLE_NIL;
     
     if (instance == NULL) {
         printf("TurbineTypeSupport::create_data error\n");
@@ -192,10 +192,10 @@ extern "C" int publisher_main(int domainId, int sample_count)
        and register the keyed instance prior to writing */
 
 	instance->turbineId = 1;
-	//instance2->turbineId = 2;
+	instance2->turbineId = 2;
 
 	instance_handle = HelloWorld_writer->register_instance(*instance);
-	//instance_handle2 = HelloWorld_writer->register_instance(*instance2);
+	instance_handle2 = HelloWorld_writer->register_instance(*instance2);
 	
 
     /* Main loop */
@@ -203,7 +203,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
 
         printf("Writing turbine info, count %d\n", count);
 
-		instance->currentProduction = count;
+		instance->currentProduction = count*2 % 300;
 		instance->maxProduction = 80;
 		instance->setPoint = 10;
         
@@ -213,7 +213,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
 			printf("write error %d\n", retcode);
 		}
 
-		/*instance2->currentProduction = count;
+		instance2->currentProduction = count % 40;
 		instance2->maxProduction = 80;
 		instance2->setPoint = 10;
 
@@ -222,7 +222,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
         if (retcode != DDS_RETCODE_OK) {
             printf("write error %d\n", retcode);
         }
-		*/
+		
         NDDSUtility::sleep(send_period);
     }
 
@@ -235,7 +235,7 @@ extern "C" int publisher_main(int domainId, int sample_count)
 */
 
     /* Delete data sample */
-    retcode = TurbineTypeSupport::delete_data(instance);
+    retcode = TurbineMessageTypeSupport::delete_data(instance);
     if (retcode != DDS_RETCODE_OK) {
         printf("HelloWorldTypeSupport::delete_data error %d\n", retcode);
     }

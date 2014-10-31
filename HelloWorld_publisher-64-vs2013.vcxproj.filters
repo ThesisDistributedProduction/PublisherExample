@@ -27,13 +27,13 @@
     <ClCompile Include="HelloWorld_publisher.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Turbine.cxx">
+    <ClCompile Include="TurbineMessage.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TurbinePlugin.cxx">
+    <ClCompile Include="TurbineMessagePlugin.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TurbineSupport.cxx">
+    <ClCompile Include="TurbineMessageSupport.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,13 +47,13 @@
     <ClInclude Include="HelloWorldSupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Turbine.h">
+    <ClInclude Include="TurbineMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TurbinePlugin.h">
+    <ClInclude Include="TurbineMessagePlugin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TurbineSupport.h">
+    <ClInclude Include="TurbineMessageSupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
